@@ -17,7 +17,7 @@ router.post('/',[
                 const password = User.rows[0].pass;
                 if(password===req.body.password){
                     jwt.sign({user:User.rows[0]},'secretkey',(err,token)=>{
-                        res.json({token:token})
+                        res.json({token:token,msg:'Login Successfull'})
                     })
                 }else{
                     res.send("Please Enter Proper Credentials")
