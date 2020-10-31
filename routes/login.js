@@ -1,5 +1,6 @@
 const express = require('express')
-const {body,validationResult} = require('express-validator')
+const {body,validationResult} = require('express-validator');
+const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
@@ -15,7 +16,9 @@ router.post('/',[
                 const Id = User.rows[0].id
                 const password = User.rows[0].pass;
                 if(password===req.body.password){
-                    res.send("Login Successfull")
+                    jwt.sign({user:User.rows[0]},'secretkey',(err,token)=>{
+                        res.json({token:token})
+                    })
                 }else{
                     res.send("Please Enter Proper Credentials")
                 }
