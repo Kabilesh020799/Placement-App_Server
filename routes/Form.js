@@ -8,7 +8,8 @@ const router = express.Router();
 const db = require('./../db')
 
 const verifyToken = (req,res,next) => {
-    const bearerHeader = req.headers['authorization']
+    console.log(req.body);
+    const bearerHeader = req.headers['authorization'];
     if(typeof(bearerHeader)!='undefined'){
         const bearer = bearerHeader.split(' ');
         const bearerToken = bearer[1]
@@ -28,14 +29,15 @@ router.post('/',verifyToken,[body('name').not().isEmpty(),body('email').not().is
         }else{
 
             try {
+                
                 String.prototype.float = function() { 
                     return parseFloat(this.replace(',', '.')); 
-                  }
+                }
                 const name = req.body.name;
                 const email = req.body.email;
                 const reg_num = req.body.reg_num;
                 const dept = parseInt(req.body.dept);
-                const cgpa = parseFloat(req.body.cgpa)
+                const cgpa = parseFloat(req.body.cgpa);
                 const ten_mark = req.body.ten_mark;
                 const ten_board = req.body.ten_board;
                 const twelve_mark = req.body.twelve_mark;
@@ -44,6 +46,7 @@ router.post('/',verifyToken,[body('name').not().isEmpty(),body('email').not().is
                 res.send(res1)
                 // const response = await db.query('INSERT INTO Students values($1,$2,$3,$4,$5)',[reg_num,name,email,dept,])
             } catch (error) {
+                console.log("Here")
                 console.log(error)
             }
         }
@@ -74,6 +77,7 @@ router.put('/',verifyToken,async(req,res)=>{
                 res.send(res1)
                 // const response = await db.query('INSERT INTO Students values($1,$2,$3,$4,$5)',[reg_num,name,email,dept,])
             } catch (error) {
+                console.log('Here')
                 console.log(error)
             }
 
