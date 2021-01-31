@@ -115,8 +115,7 @@ router.put("/", verifyToken, async (req, res) => {
         res.send(res1);
         // const response = await db.query('INSERT INTO Students values($1,$2,$3,$4,$5)',[reg_num,name,email,dept,])
       } catch (error) {
-        console.log("Here");
-        console.log(error);
+        res.send(error);
       }
     }
   });
