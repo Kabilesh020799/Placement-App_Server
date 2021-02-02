@@ -56,7 +56,7 @@ router.post(
         const Id = User.rows[0].id;
         const password = User.rows[0].pass;
         if (password === req.body.password) {
-          jwt.sign({ user: User.rows[0] }, "secretkey", (err, token) => {
+          jwt.sign({ user: User.rows[0] }, "adminkey", (err, token) => {
             res.json({ token: token, msg: "Login Successfull" });
           });
         } else {

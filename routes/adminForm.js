@@ -1,12 +1,27 @@
 const express = require("express");
 const { body, validationResult } = require("express-validator");
+const jwt = require("jsonwebtoken");
+const moment = require("moment");
 
 const router = express.Router();
 
 const db = require("./../db");
 
+const verifyToken = (req, res, next) => {
+  const bearerHeader = req.headers["authorization"];
+  if (typeof bearerHeader != "undefined") {
+    const bearer = bearerHeader.split(" ");
+    const bearerToken = bearer[1];
+    req.token = bearerToken;
+    next();
+  } else {
+    res.send("Forbidden");
+  }
+};
+
 router.post(
   "/",
+  verifyToken,
   [
     body("name").not().isEmpty(),
     body("id").not().isEmpty(),
@@ -17,28 +32,32 @@ router.post(
     body("date").not().isEmpty(),
   ],
   async (req, res) => {
-    try {
-      const id = req.body.id;
-      const company_name = req.body.companyName;
-      const email = req.body.email;
-      const role_off = req.body.role;
-      const ctc_off = req.body.ctc;
-      const req_cgpa = parseFloat(req.body.cgpa);
-      const date_alotted = req.body.date;
-      const result = await db.query(
-        "INSERT INTO company(id,company_name,mail_id) values($1,$2,$3)",
-        [id, company_name, email]
-      );
-      const result1 = await db.query(
-        "INSERT INTO schedule (company_name,role_off,ctc_off,req_cgpa,placed_stu,date_alotted) values ($1,$2,$3,$4,$5,$6)",
-        [company_name, role_off, ctc_off, req_cgpa, date_alotted]
-      );
-      //console.log(result);
-      res.send(result, result1);
-    } catch (err) {
-      //console.log(err);
-      res.send(err);
-    }
+    jwt.verify(req.token, "adminkey", async (err, authData) => {
+      if (err) {
+        res.send({
+          error: "Request Forbidden",
+        });
+      } else {
+        try {
+          console.log(req.body);
+          const id = req.body.id;
+          const role_off = req.body.role;
+          const ctc_off = parseFloat(req.body.ctc);
+          const req_cgpa = parseInt(req.body.cgpa);
+          const date_alotted = req.body.date;
+          const company_id = req.body.company_id;
+          const result1 = await db.query(
+            "INSERT INTO schedule (id,role_off,ctc_off,cgpa,company_id,date_alloted) values ($1,$2,$3,$4,$5,$6)",
+            [id, role_off, ctc_off, req_cgpa, company_id, date_alotted]
+          );
+          //console.log(result);
+          res.send(result1);
+        } catch (err) {
+          console.log(err);
+          res.send(err);
+        }
+      }
+    });
   }
 );
 
