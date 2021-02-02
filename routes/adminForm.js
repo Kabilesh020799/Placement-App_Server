@@ -9,6 +9,7 @@ const db = require("./../db");
 
 const verifyToken = (req, res, next) => {
   const bearerHeader = req.headers["authorization"];
+  console.log(bearerHeader);
   if (typeof bearerHeader != "undefined") {
     const bearer = bearerHeader.split(" ");
     const bearerToken = bearer[1];
@@ -40,15 +41,14 @@ router.post(
       } else {
         try {
           console.log(req.body);
-          const id = req.body.id;
           const role_off = req.body.role;
           const ctc_off = parseFloat(req.body.ctc);
           const req_cgpa = parseInt(req.body.cgpa);
           const date_alotted = req.body.date;
           const company_id = req.body.company_id;
           const result1 = await db.query(
-            "INSERT INTO schedule (id,role_off,ctc_off,cgpa,company_id,date_alloted) values ($1,$2,$3,$4,$5,$6)",
-            [id, role_off, ctc_off, req_cgpa, company_id, date_alotted]
+            "INSERT INTO schedule (role_off,ctc_off,cgpa,company_id,date_alloted) values ($1,$2,$3,$4,$5)",
+            [role_off, ctc_off, req_cgpa, company_id, date_alotted]
           );
           //console.log(result);
           res.send(result1);
