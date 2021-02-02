@@ -1,7 +1,6 @@
 const express = require("express");
 const { body, validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
-const moment = require("moment");
 
 const router = express.Router();
 
