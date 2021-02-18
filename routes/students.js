@@ -25,7 +25,7 @@ router.get("/", verifyToken, async (req, res) => {
       res.send("Token error");
     } else {
       const names = await db.query("SELECT regnumber FROM students");
-      res.send(names.rows[0]);
+      res.send(names.rows);
     }
   });
 });
@@ -55,7 +55,7 @@ router.get("/:id/company", verifyToken, async (req, res) => {
         [id]
       );
       const schedules = await db.query(
-        "SELECT s.id,s.ctc_off,s.date_alloted,s.role_off,c.id,c.company_name,c.mail_id FROM schedule s,company c WHERE c.id = s.company_id AND s.cgpa < $1",
+        "SELECT s.id,s.ctc_off,s.date_alloted,s.role_off,s.company_id,c.company_name,c.mail_id FROM schedule s,company c WHERE c.id = s.company_id AND s.cgpa < $1",
         [details.rows[0].cgpa]
       );
       res.send(schedules.rows);
