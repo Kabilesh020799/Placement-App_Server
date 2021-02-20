@@ -89,6 +89,7 @@ router.put("/", verifyToken, async (req, res) => {
         String.prototype.float = function () {
           return parseFloat(this.replace(",", "."));
         };
+        console.log("dsdsd");
         const name = req.body.name;
         const email = req.body.email;
         const reg_num = req.body.reg_num;
@@ -99,18 +100,7 @@ router.put("/", verifyToken, async (req, res) => {
         const twelve_mark = req.body.twelve_mark;
         const twelve_board = req.body.twelve_board;
         const res1 = await db.query(
-          "UPDATE Students SET name=$1,email=$2,fk_dept=$3,cgpa=$4,twelve_mark=$5,twelve_board=$6,ten_mark=$7,ten_board=$8 WHERE RegNumber=$9",
-          [
-            name,
-            email,
-            dept,
-            cgpa,
-            twelve_mark,
-            twelve_board,
-            ten_mark,
-            ten_board,
-            reg_num,
-          ]
+          `UPDATE students SET name=${name},email=${email},dept_id=${dept},cgpa=${cgpa},twelve_mark=${twelve_mark},twelve_board=${twelve_board},ten_mark=${ten_mark},ten_board=${ten_board} WHERE regnumber=${reg_num}`
         );
         res.send(res1);
         // const response = await db.query('INSERT INTO Students values($1,$2,$3,$4,$5)',[reg_num,name,email,dept,])
